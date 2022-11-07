@@ -18,6 +18,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.UniqueConstraint;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -39,12 +42,12 @@ public class Usuario implements UserDetails {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@Column(name = "login")
+	@Column(name = "login", unique = true)
 	private String login;
 
 	@Column(name = "nome")
 	private String nome;
-
+	
 	@Column(name = "senha")
 	private String senha;
 
@@ -73,46 +76,43 @@ public class Usuario implements UserDetails {
 		this.roles = roles;
 	}
 
-	public void addTelefones(Telefone telefone) {
-		telefones.add(telefone);
-		telefone.setUsuario(this);
-	}
-
-	public void removeTelefones(Telefone telefone) {
-		telefones.remove(telefone);
-		telefone.setUsuario(null);
-	}
-
+	@JsonIgnore
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return roles;
 	}
 
+	@JsonIgnore
 	@Override
 	public String getPassword() {
 		return this.senha;
 	}
 
+	@JsonIgnore
 	@Override
 	public String getUsername() {
 		return this.login;
 	}
 
+	@JsonIgnore
 	@Override
 	public boolean isAccountNonExpired() {
 		return true;
 	}
 
+	@JsonIgnore
 	@Override
 	public boolean isAccountNonLocked() {
 		return true;
 	}
 
+	@JsonIgnore
 	@Override
 	public boolean isCredentialsNonExpired() {
 		return true;
 	}
 
+	@JsonIgnore
 	@Override
 	public boolean isEnabled() {
 		return true;

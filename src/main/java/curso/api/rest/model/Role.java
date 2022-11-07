@@ -12,6 +12,8 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.security.core.GrantedAuthority;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -40,6 +42,7 @@ public class Role implements GrantedAuthority {
 	@Column(name = "nome_role")
 	private String nomeRole; // EX: ROLE_SECRETARIA, ROLE_GERENTE, ROLE_USUARIO, ROLE_ADMIN
 
+	@JsonIgnore
 	@Override
 	public String getAuthority() {
 		return this.nomeRole;

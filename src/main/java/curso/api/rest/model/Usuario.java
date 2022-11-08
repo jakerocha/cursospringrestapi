@@ -36,6 +36,9 @@ public class Usuario implements UserDetails {
 	@Column(name = "nome")
 	private String nome;
 	
+	@Column(name="cpf", length=11, nullable = true)
+	private String cpf;
+	
 	@Column(name = "senha")
 	private String senha;
 	
@@ -89,6 +92,14 @@ public class Usuario implements UserDetails {
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+	
+	public String getCpf() {
+		return cpf;
+	}
+
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
 	}
 
 	public String getSenha() {

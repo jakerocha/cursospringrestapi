@@ -16,6 +16,7 @@ import curso.api.rest.repository.UsuarioRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -61,6 +62,7 @@ public class JWTTokenAutenticacaoService {
 	public Authentication getAuthentication(HttpServletRequest request, HttpServletResponse response) { 
 		//pega o token enviado no cabeçalho http
 		String token = request.getHeader(HEADER_STRING);
+		try {
 		if (token != null) {
 			
 			String tokenLimpo = token.replace(TOKEN_PREFIX, "").trim();
@@ -82,6 +84,11 @@ public class JWTTokenAutenticacaoService {
 					}
 				} 
 			} 
+		} /*fim condicao token*/
+		} catch(ExpiredJwtException ex) {
+			try {
+				response.getOutputStream().println("Seu TOKEN está expirado, faça o login ou informe um novo TOKEN para autenticação.");
+			} catch (IOException e) {}
 		}
 		
 		//liberando resposta para portas diferentes que usam a API ou caso clientes WEB

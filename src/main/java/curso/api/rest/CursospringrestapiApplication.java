@@ -16,23 +16,29 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @SpringBootApplication
 @EntityScan(basePackages = {"curso.api.rest.model"})
 @ComponentScan(basePackages = {"curso.*"})
-@EnableJpaRepositories(basePackages = {"curso.api.rest.repository"} )
+@EnableJpaRepositories(basePackages = {"curso.api.rest.repository"})
 @EnableTransactionManagement
 @EnableWebMvc
 @RestController
 @EnableAutoConfiguration
 @EnableCaching
-public class CursospringrestapiApplication implements WebMvcConfigurer{
+public class CursospringrestapiApplication implements WebMvcConfigurer {
 
 	public static void main(String[] args) {
 		SpringApplication.run(CursospringrestapiApplication.class, args);
 		//System.out.println(new BCryptPasswordEncoder().encode("123"));
 	}
-
-	@Override	
-	public void addCorsMappings(CorsRegistry registry) {	 
+	
+    /*Mapeamento Global que refletem em todo o sistema*/
+	@Override
+	public void addCorsMappings(CorsRegistry registry) {
+		
 		registry.addMapping("/usuario/**")
-		        .allowedMethods("*")
-		        .allowedOrigins("*");
+		.allowedMethods("*")
+		.allowedOrigins("*");
+		/*Liberando o mapeamento de usuario para todas as origens*/
+		
 	}
+
 }
+

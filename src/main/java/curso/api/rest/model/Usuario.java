@@ -21,19 +21,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.FieldDefaults;
-
 @Entity
-@Getter
-@Setter
-@FieldDefaults(makeFinal = false, level = AccessLevel.PRIVATE)
-@EqualsAndHashCode
-@ToString
 public class Usuario implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
@@ -50,6 +38,9 @@ public class Usuario implements UserDetails {
 	
 	@Column(name = "senha")
 	private String senha;
+	
+	@Column(name="token")
+	private String token;
 
 	@OneToMany(mappedBy = "usuario", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Telefone> telefones;
@@ -73,6 +64,62 @@ public class Usuario implements UserDetails {
 		this.nome = nome;
 		this.senha = senha;
 		this.telefones = telefones;
+		this.roles = roles;
+	}
+	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getLogin() {
+		return login;
+	}
+
+	public void setLogin(String login) {
+		this.login = login;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
+	
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public List<Telefone> getTelefones() {
+		return telefones;
+	}
+
+	public void setTelefones(List<Telefone> telefones) {
+		this.telefones = telefones;
+	}
+
+	public List<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<Role> roles) {
 		this.roles = roles;
 	}
 

@@ -14,21 +14,9 @@ import org.springframework.security.core.GrantedAuthority;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-
 @Entity
 @Table(name = "role")
 @SequenceGenerator(name = "seq_role", sequenceName = "seq_role", allocationSize = 1, initialValue = 1)
-@Getter
-@Setter
-@ToString
-@AllArgsConstructor
-@EqualsAndHashCode
-
 public class Role implements GrantedAuthority {
 
 	private static final long serialVersionUID = 1L;
@@ -51,4 +39,20 @@ public class Role implements GrantedAuthority {
 	public Role() {
 	}
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getNomeRole() {
+		return nomeRole;
+	}
+
+	public void setNomeRole(String nomeRole) {
+		this.nomeRole = nomeRole;
+	}
+	
 }

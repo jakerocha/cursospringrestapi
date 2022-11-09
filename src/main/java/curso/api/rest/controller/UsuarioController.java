@@ -1,5 +1,12 @@
 package curso.api.rest.controller;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +26,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.google.gson.Gson;
 
 import curso.api.rest.model.Telefone;
 import curso.api.rest.model.Usuario;
@@ -61,12 +70,31 @@ public class UsuarioController {
 	}
 	
 	@PostMapping(value="/", produces = "application/json")
-	public ResponseEntity<Usuario> cadastrar(@RequestBody Usuario usuario){
+	public ResponseEntity<Usuario> cadastrar(@RequestBody Usuario usuario) throws Exception{
 		if (usuario.getTelefones()!=null) {
 			for (Telefone telefone: usuario.getTelefones()) { 
 				telefone.setUsuario(usuario);
 			}
 		}
+		/*consumindo uma API publica externa de CEP*/
+		URL url = new URL("https://viacep.com.br/ws/"+usuario.getCep()+"/json/");
+		URLConnection connection = url.openConnection();
+		InputStream is = connection.getInputStream();
+		BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+		String cep="";
+		StringBuilder jsonCep = new StringBuilder();
+		while((cep = br.readLine()) !=null) {
+			jsonCep.append(cep);
+		}
+		Usuario userAux = new Gson().fromJson(jsonCep.toString(), Usuario.class);
+		usuario.setCep(userAux.getCep());
+		usuario.setLogradouro(userAux.getLogradouro());
+		usuario.setBairro(userAux.getBairro());
+		usuario.setComplemento(userAux.getComplemento());
+		usuario.setLocalidade(userAux.getLocalidade());
+		usuario.setUf(userAux.getUf());
+		/*consumindo uma API publica externa de CEP*/
+		
 		usuario.setSenha(new BCryptPasswordEncoder().encode(usuario.getSenha()));
 		Usuario usuarioSalvo = (Usuario) usuarioRepository.save(usuario);
 		return new ResponseEntity<Usuario>(usuarioSalvo, HttpStatus.CREATED);
